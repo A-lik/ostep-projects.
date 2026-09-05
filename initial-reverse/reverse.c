@@ -1,45 +1,13 @@
-#include "reverse.h"
-#include "fprinterr_exit.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <sys/stat.h>
+#include "reverse.h"
+#include "utils/fprinterr_exit.h"
+#include "utils/linked_list.h"
 
 static void handle_input_file(const char *src_file);
 static void handle_input_output_files(const char *src_file, const char *dst_file);
 static void copy_reversed_stream(FILE *src, FILE *dst);
-
-struct Node {
-    char *line;
-    struct Node *next;
-};
-
-struct List {
-    struct Node *head;
-};
-
-static void init_list(struct List *list) {
-    list->head = NULL;
-}
-
-// allocate memory for new node, change data of new node,
-// link new node to the head(NULL for the first element), make head newly created node for the next element
-static void push_list(struct List *list, char *line) {
-    struct Node *new_node = malloc(sizeof(struct Node));
-    if (!new_node) {
-        fprinterr_exit("malloc failed");
-    }
-    new_node->line = line;
-    new_node->next = list->head;
-    list->head = new_node;
-}
-
-void print_list(struct List *list, FILE *dst) {
-    struct Node *current = list->head;
-    while (current) {
-        fprintf(dst, "%s", current->line);
-        current = current->next;
-    }
-}
 
 int main(const int argc, char *argv[]) {
     if (argc > 3) {
@@ -72,6 +40,12 @@ static void handle_input_file(const char *src_file) {
 }
 
 static void handle_input_output_files(const char *src_file, const char *dst_file) {
+    struct stat a, b;
+    if (stat(src_file, &a) == 0 && stat(dst_file, &b) == 0 &&
+        a.st_dev == b.st_dev && a.st_ino == b.st_ino) {
+        fprinterr_exit("reverse: input and output file must differ");
+        }
+
     FILE *src_fd = fopen(src_file, "r");
     if (!src_fd) {
         fprinterr_exit("reverse: cannot open file '%s'", src_file);
@@ -100,5 +74,6 @@ static void copy_reversed_stream(FILE *src, FILE *dst) {
     }
     print_list(&list, dst);
 
+    free_list(&list);
     free(line);
 }
