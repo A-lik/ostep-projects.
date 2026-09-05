@@ -25,6 +25,10 @@ int main(const int argc, char *argv[]) {
         handle_input_output_files(input_file, output_file);
     }
 
+    if (argc == 1) {
+        copy_reversed_stream(stdin, stdout);
+    }
+
     return 0;
 }
 
