@@ -17,8 +17,8 @@ struct Entry {
 
 struct HashTable {
     struct Entry **buckets;
-    size_t capacity;
-    size_t size;
+    size_t capacity; // how many buckets the array has
+    size_t size; // how many key-value pairs are actually stored
 };
 
 struct HashTable *ht_create(size_t capacity) {
@@ -32,7 +32,7 @@ struct HashTable *ht_create(size_t capacity) {
         cap *= 2;
     }
 
-    // printf("capacity: %lu\n", cap);
+    printf("capacity: %lu\n", cap);
 
     struct Entry **buckets = calloc(cap, sizeof(struct Entry *));
     if (buckets == NULL) {
@@ -50,6 +50,15 @@ struct HashTable *ht_create(size_t capacity) {
 void ht_free(struct HashTable *table) {
     if (table == NULL) {
         return;
+    }
+    for (size_t i = 0; i < table->capacity; i++) {
+        struct Entry *entry = table->buckets[i];
+        while (entry != NULL) {
+            free(entry->value);
+            struct Entry *next = entry->next;
+            free(entry);
+            entry = next;
+        }
     }
     free(table->buckets);
     free(table);
@@ -80,6 +89,8 @@ bool ht_put(struct HashTable *table, const int key, const char *value) {
             if (temp_value == NULL) return false;
             free(entry->value);
             entry->value = temp_value;
+            printf("ht_put capacity: %lu\n", table->capacity);
+            printf("ht_put size: %lu\n", table->size);
             return true;
         }
         entry = entry->next;
@@ -98,5 +109,26 @@ bool ht_put(struct HashTable *table, const int key, const char *value) {
     new_entry->next = table->buckets[index];
     table->buckets[index] = new_entry;
     table->size++;
+    printf("ht_put capacity: %lu\n", table->capacity);
+    printf("ht_put size: %lu\n", table->size);
     return true;
+}
+
+bool ht_delete(struct HashTable *table, const int key) {
+    size_t index = ht_index(table, key);
+    struct Entry **ppEntry = &table->buckets[index];
+
+    while (*ppEntry != NULL) {
+        if ((*ppEntry)->key == key) {
+            struct Entry *victim = *ppEntry;
+            *ppEntry = victim->next;
+            free(victim->value);
+            free(victim);
+            table->size--;
+            return true;
+        }
+        ppEntry = &(*ppEntry)->next;
+    }
+
+    return false;
 }
