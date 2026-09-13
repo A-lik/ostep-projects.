@@ -6,10 +6,10 @@
 #include "hash.h"
 #include "entry.c"
 
-static void do_put(struct HashTable *table, const int key, const char *value);
+static void do_put(struct HashTable *table, const int key, const char *value, bool *mutated);
 static void do_get(struct HashTable *table, const int key);
-static void do_delete(struct HashTable *table, const int key);
-static void do_clear(struct HashTable *table);
+static void do_delete(struct HashTable *table, const int key, bool *mutated);
+static void do_clear(struct HashTable *table, bool *mutated);
 static void do_all(struct HashTable *table);
 
 static void load_to_ht(struct HashTable *table, char *line);
@@ -28,21 +28,23 @@ int main(const int argc, char *argv[]) {
     char *line = NULL;
     size_t size = 0;
     struct HashTable *table = ht_create(8);
+    bool mutated = false;
 
     if (db_file != NULL) {
-        size_t n;
+        ssize_t n;
         while ((n = getline(&line, &size, db_file)) != -1) {
             if (n > 0 && line[n - 1] == '\n') line[n - 1] = '\0';
             load_to_ht(table, line);
         }
+        free(line);
+        fclose(db_file);
     }
-    fclose(db_file);
-
-    char *cmd;
-    int key;
-    char *value;
 
     for (int i = 1; i < argc; i++) {
+        char *cmd;
+        int key;
+        char *value;
+
         if (strlen(argv[i]) > 1) {
             cmd = strsep(&argv[i], ",");
             key = atoi(strsep(&argv[i], ","));
@@ -50,24 +52,28 @@ int main(const int argc, char *argv[]) {
         }
         else cmd = argv[i];
 
-        if (strcmp(cmd, "p") == 0)      do_put(table, key, value);
+        if (strcmp(cmd, "p") == 0)      do_put(table, key, value, &mutated);
         else if (strcmp(cmd, "g") == 0) do_get(table, key);
-        else if (strcmp(cmd, "d") == 0) do_delete(table, key);
-        else if (strcmp(cmd, "c") == 0) do_clear(table);
+        else if (strcmp(cmd, "d") == 0) do_delete(table, key, &mutated);
+        else if (strcmp(cmd, "c") == 0) do_clear(table, &mutated);
         else if (strcmp(cmd, "a") == 0) do_all(table);
         else                            printf("bad command\n");
     }
 
-    FILE *temp_db_file = fopen("database_temp.txt", "w");
-    ht_foreach(table, write_entry, temp_db_file);
-    fclose(temp_db_file);
-    rename("database_temp.txt", "database.txt");
+    if (mutated) {
+        FILE *temp_db_file = fopen("database_temp.txt", "w");
+        ht_foreach(table, write_entry, temp_db_file);
+        fclose(temp_db_file);
+        rename("database_temp.txt", "database.txt");
+    }
+
     ht_free(table);
     return 0;
 }
 
-static void do_put(struct HashTable *table, const int key, const char *value) {
+static void do_put(struct HashTable *table, const int key, const char *value, bool *mutated) {
     bool put_result = ht_put(table, key, value);
+    if (put_result) *mutated = true;
     printf(put_result ? "%d,%s saved successfully\n" : "failed to save %d,%s\n", key, value);
 }
 
@@ -80,13 +86,15 @@ static void do_get(struct HashTable *table, const int key) {
     printf("%d,%s\n", key, value);
 }
 
-static void do_delete(struct HashTable *table, const int key) {
+static void do_delete(struct HashTable *table, const int key, bool *mutated) {
     bool delete_result = ht_delete(table, key);
+    if (delete_result) *mutated = true;
     printf(delete_result ? "%d deleted successfully\n" : "%d not found\n", key);
 }
 
-static void do_clear(struct HashTable *table) {
+static void do_clear(struct HashTable *table, bool *mutated) {
     ht_clear(table);
+    *mutated = true;
 }
 
 static void do_all(struct HashTable *table) {
