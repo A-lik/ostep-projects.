@@ -32,7 +32,7 @@ struct HashTable *ht_create(size_t capacity) {
         cap *= 2;
     }
 
-    printf("capacity: %lu\n", cap);
+    // printf("capacity: %lu\n", cap);
 
     struct Entry **buckets = calloc(cap, sizeof(struct Entry *));
     if (buckets == NULL) {
@@ -48,9 +48,15 @@ struct HashTable *ht_create(size_t capacity) {
 }
 
 void ht_free(struct HashTable *table) {
-    if (table == NULL) {
-        return;
-    }
+    // printf("table size: %zu\n", table->size);
+    if (table == NULL) return;
+    ht_clear(table);
+    free(table->buckets);
+    free(table);
+}
+
+void ht_clear(struct HashTable *table) {
+    if (table == NULL) return;
     for (size_t i = 0; i < table->capacity; i++) {
         struct Entry *entry = table->buckets[i];
         while (entry != NULL) {
@@ -59,9 +65,9 @@ void ht_free(struct HashTable *table) {
             free(entry);
             entry = next;
         }
+        table->buckets[i] = NULL;
     }
-    free(table->buckets);
-    free(table);
+    table->size = 0;
 }
 
 static size_t ht_index(const struct HashTable *table, const int key) {
@@ -89,8 +95,8 @@ bool ht_put(struct HashTable *table, const int key, const char *value) {
             if (temp_value == NULL) return false;
             free(entry->value);
             entry->value = temp_value;
-            printf("ht_put capacity: %lu\n", table->capacity);
-            printf("ht_put size: %lu\n", table->size);
+            // printf("ht_put capacity: %lu\n", table->capacity);
+            // printf("ht_put size: %lu\n", table->size);
             return true;
         }
         entry = entry->next;
@@ -109,8 +115,8 @@ bool ht_put(struct HashTable *table, const int key, const char *value) {
     new_entry->next = table->buckets[index];
     table->buckets[index] = new_entry;
     table->size++;
-    printf("ht_put capacity: %lu\n", table->capacity);
-    printf("ht_put size: %lu\n", table->size);
+    // printf("ht_put capacity: %lu\n", table->capacity);
+    // printf("ht_put size: %lu\n", table->size);
     return true;
 }
 
