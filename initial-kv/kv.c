@@ -15,11 +15,14 @@ static void do_all(struct HashTable *table);
 static void load_to_ht(struct HashTable *table, char *line);
 static struct Entry *to_entry(char *line, struct Entry *out);
 
+static void print_entry(const int key, const char *value, void *context);
+static void write_entry(const int key, const char *value, void *context);
+
 int main(const int argc, char *argv[]) {
-    if (argc == 1) {
-        printf("exited with 0 passed args\n");
-        exit(0);
-    }
+    // if (argc == 1) {
+    //     printf("exited with 0 passed args\n");
+    //     exit(0);
+    // }
 
     FILE *db_file = fopen("database.txt", "r");
     char *line = NULL;
@@ -27,10 +30,13 @@ int main(const int argc, char *argv[]) {
     struct HashTable *table = ht_create(8);
 
     if (db_file != NULL) {
-        while (getline(&line, &size, db_file) != -1) {
+        size_t n;
+        while ((n = getline(&line, &size, db_file)) != -1) {
+            if (n > 0 && line[n - 1] == '\n') line[n - 1] = '\0';
             load_to_ht(table, line);
         }
     }
+    fclose(db_file);
 
     char *cmd;
     int key;
@@ -52,6 +58,11 @@ int main(const int argc, char *argv[]) {
         else                            printf("bad command\n");
     }
 
+    FILE *temp_db_file = fopen("database_temp.txt", "w");
+    ht_foreach(table, write_entry, temp_db_file);
+    fclose(temp_db_file);
+    rename("database_temp.txt", "database.txt");
+    ht_free(table);
     return 0;
 }
 
@@ -79,12 +90,23 @@ static void do_clear(struct HashTable *table) {
 }
 
 static void do_all(struct HashTable *table) {
-    printf("all\n");
+    ht_foreach(table, print_entry, NULL);
+}
+
+static void print_entry(const int key, const char *value, void *context) {
+    (void)context;
+    printf("%d,%s\n", key, value);
+}
+
+static void write_entry(const int key, const char *value, void *context) {
+    FILE *f = context;
+    fprintf(f, "%d,%s\n", key, value);
 }
 
 static void load_to_ht(struct HashTable *table, char *line) {
     struct Entry entry;
     to_entry(line, &entry);
+    // printf("%s", entry.value);
     ht_put(table, entry.key, entry.value);
 }
 

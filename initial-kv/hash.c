@@ -138,3 +138,16 @@ bool ht_delete(struct HashTable *table, const int key) {
 
     return false;
 }
+
+void ht_foreach(
+    struct HashTable *table,
+    void (*fn)(int key, const char *value, void *context),
+    void *context) {
+    for (size_t i =0; i < table->capacity; i++) {
+        struct Entry *entry = table->buckets[i];
+        while (entry != NULL) {
+            fn(entry->key, entry-> value, context);
+            entry = entry->next;
+        }
+    }
+}

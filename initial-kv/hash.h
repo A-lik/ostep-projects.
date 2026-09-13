@@ -16,5 +16,10 @@ void ht_clear(struct HashTable *table);
 const char *ht_get_value(const struct HashTable *table, const int key);
 bool ht_put(struct HashTable *table, const int key, const char *value);
 bool ht_delete(struct HashTable *table, const int key);
+void ht_foreach(
+    struct HashTable *table,
+    void (*fn)(const int key, const char *value, void *context),
+    void *context
+    );
 
 #endif //INITIAL_KV_HASH_H
