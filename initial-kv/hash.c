@@ -48,7 +48,6 @@ struct HashTable *ht_create(size_t capacity) {
 }
 
 void ht_free(struct HashTable *table) {
-    // printf("table size: %zu\n", table->size);
     if (table == NULL) return;
     ht_clear(table);
     free(table->buckets);
@@ -68,6 +67,12 @@ void ht_clear(struct HashTable *table) {
         table->buckets[i] = NULL;
     }
     table->size = 0;
+}
+
+bool ht_is_empty(struct HashTable *table) {
+    if (table == NULL) return true;
+    if (table->size == 0) return true;
+    return false;
 }
 
 static size_t ht_index(const struct HashTable *table, const int key) {

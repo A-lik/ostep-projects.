@@ -21,5 +21,6 @@ void ht_foreach(
     void (*fn)(const int key, const char *value, void *context),
     void *context
     );
+bool ht_is_empty(struct HashTable *table);
 
 #endif //INITIAL_KV_HASH_H

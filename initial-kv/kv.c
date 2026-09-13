@@ -93,8 +93,10 @@ static void do_delete(struct HashTable *table, const int key, bool *mutated) {
 }
 
 static void do_clear(struct HashTable *table, bool *mutated) {
-    ht_clear(table);
-    *mutated = true;
+    if (!ht_is_empty(table)) {
+        ht_clear(table);
+        *mutated = true;
+    }
 }
 
 static void do_all(struct HashTable *table) {
