@@ -63,6 +63,11 @@ int main() {
 
     ht_delete(table, 99);
 
+    ht_clear(table);
+    bool was_value2_put = ht_put(table, 2, "Albert2");
+    printf("value2 was put: %s\n", was_value2_put ? "true" : "false");
+    value2 = ht_get_value(table, 2);
+    printf("value2: %s\n", value2);
+
     ht_free(table);
-    // ht_get_value(table, 1);
 }

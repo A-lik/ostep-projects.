@@ -1,0 +1,8 @@
+Последняя строка на русском языке.
+Trailing spaces are here ->   
+Line six follows an empty line.
+
+Line four contains punctuation: commas, periods, and "quotes".
+	This line starts with a tab character.
+Second line with some numbers: 42 1337 007
+The quick brown fox jumps over the lazy dog.
