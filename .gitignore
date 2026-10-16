@@ -9,3 +9,4 @@ initial-kv/another_test
 initial-kv/database.txt
 processes-shell/test
 processes-shell/p4.output
+build/
