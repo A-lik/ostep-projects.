@@ -21,7 +21,7 @@ int main(const int argc, char *argv[]) {
 
     switch (mode) {
         case MODE_BATCH:
-            batch();
+            batch(argv[1]);
             break;
         case MODE_INTERACTIVE:
             interactive(prog_name);

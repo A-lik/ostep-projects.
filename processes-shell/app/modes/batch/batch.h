@@ -5,6 +5,6 @@
 #ifndef PROCESSES_SHELL_BATCH_H
 #define PROCESSES_SHELL_BATCH_H
 
-void batch();
+void batch(char *file_name);
 
 #endif //PROCESSES_SHELL_BATCH_H

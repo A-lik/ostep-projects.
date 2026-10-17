@@ -13,12 +13,16 @@ add_executable(wish
         app/wish.c
         app/modes/batch/batch.c
         app/modes/interactive/interactive.c
-        app/modes/interactive/builtincmd/builtin_cmd.c
-        app/modes/interactive/externalcmd/external_cmd.c
-        app/modes/interactive/common/error.c
-        app/modes/interactive/common/error.h
+        app/modes/common/cmd_executor/builtin/builtin_cmd.c
+        app/modes/common/cmd_executor/external/external_cmd.c
+        app/modes/common/error/error.c
+        app/modes/common/error/error.h
         app/path.c
         app/path.h
+        app/modes/common/cmd_parser/cmd_parser.c
+        app/modes/common/cmd_parser/cmd_parser.h
+        app/modes/common/cmd_runner/cmd_runner.c
+        app/modes/common/cmd_runner/cmd_runner.h
 )
 
 target_compile_options(wish PRIVATE -Wall -Wextra)

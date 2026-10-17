@@ -6,27 +6,12 @@
 #include <stdlib.h>
 #include <unistd.h>
 
-#include "app/modes/interactive/builtincmd/builtin_cmd.h"
-#include "app/modes/interactive/common/command.h"
 #include "app/path.h"
-
-static const char *builtin_cmd_names[] = {
-    [CMD_EXIT] = "exit",
-    [CMD_CD] = "cd",
-    [CMD_PATH] = "path",
-};
+#include "app/modes/common/models/command.h"
 
 static int exec_exit(command_t *cmd);
 static int exec_cd(command_t *cmd);
 static int exec_path(command_t *cmd);
-
-int find_builtin_cmd(const char *cmd_name) {
-    for (int i = 0; i < CMD_COUNT; i++) {
-        if (strcmp(cmd_name, builtin_cmd_names[i]) == 0) return i;
-    }
-
-    return -1;
-}
 
 int exec_builtin_cmd(command_t *cmd) {
     switch (cmd->builtin_cmd_num) {
