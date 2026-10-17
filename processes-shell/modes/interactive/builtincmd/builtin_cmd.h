@@ -7,5 +7,5 @@
 #include "modes/interactive/common/command.h"
 
 int find_builtin_cmd(const char *cmd_name);
-void exec_builtin_cmd(command_t *cmd);
+int exec_builtin_cmd(command_t *cmd);
 #endif //PROCESSES_SHELL_BUILTIN_CMD_H

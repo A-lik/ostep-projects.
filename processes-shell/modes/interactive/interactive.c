@@ -2,7 +2,9 @@
 #include <unistd.h>
 #include <string.h>
 #include <stdlib.h>
+
 #include "modes/interactive/interactive.h"
+#include "common/error.h"
 #include "modes/interactive/builtincmd/builtin_cmd.h"
 #include "modes/interactive/externalcmd/external_cmd.h"
 
@@ -12,6 +14,8 @@ static void print_sh_name(char *prog_name) {
     printf("%s> ", prog_name);
     fflush(stdout);
 }
+
+static int run_cmd(command_t *cmd);
 
 void interactive(char *prog_name) {
     char *pLine = NULL;
@@ -33,13 +37,16 @@ void interactive(char *prog_name) {
         }
         cmd.argv[cmd.argc] = NULL;
 
-        int cmd_res;
-        if ((cmd_res = find_builtin_cmd(cmd.argv[0])) >= 0) {
-            cmd.builtin_cmd_num = cmd_res;
-            exec_builtin_cmd(&cmd);
-        }
-        else exec_external_cmd(&cmd);
+        if (run_cmd(&cmd) < 0) print_error();
     }
 
     free(pLine);
+}
+
+static int run_cmd(command_t *cmd) {
+    const int builtin = find_builtin_cmd(cmd->argv[0]);
+    if (builtin < 0) return exec_external_cmd(cmd);
+
+    cmd->builtin_cmd_num = builtin;
+    return exec_builtin_cmd(cmd);
 }
