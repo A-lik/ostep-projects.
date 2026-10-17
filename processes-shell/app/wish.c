@@ -4,13 +4,16 @@
 #include <unistd.h>
 #include "modes/batch/batch.h"
 #include "modes/interactive/interactive.h"
+#include "app/path.h"
 
 typedef enum { MODE_BATCH, MODE_INTERACTIVE } sh_mode_t;
 
 static sh_mode_t choose_mode(int argc);
+static void init_path();
 
 int main(const int argc, char *argv[]) {
     if (argc > 2) exit(0);
+    init_path();
     const sh_mode_t mode = choose_mode(argc);
 
     char *prog_name = argv[0];
@@ -34,4 +37,9 @@ static sh_mode_t choose_mode(const int argc) {
     else mode = MODE_INTERACTIVE;
 
     return mode;
+}
+
+static void init_path() {
+    search_path[0] = strdup("/bin");
+    search_path_len = 1;
 }

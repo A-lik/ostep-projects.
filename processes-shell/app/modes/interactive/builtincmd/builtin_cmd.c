@@ -8,6 +8,7 @@
 
 #include "app/modes/interactive/builtincmd/builtin_cmd.h"
 #include "app/modes/interactive/common/command.h"
+#include "app/path.h"
 
 static const char *builtin_cmd_names[] = {
     [CMD_EXIT] = "exit",
@@ -56,5 +57,21 @@ static int exec_cd(command_t *cmd) {
 }
 
 static int exec_path(command_t *cmd) {
+    if (cmd->argc == 1) {
+        for (int i = 0; i < search_path_len; i++) {
+            free(search_path[i]);
+            search_path[i] = NULL;
+        }
+        search_path_len = 0;
+    }
 
+    int new_path_len = 0;
+    for (int i = 1; i < cmd->argc; i++) {
+        char *pArg = strdup(cmd->argv[i]);
+        if (!pArg) return -1;
+        search_path[new_path_len++] = pArg; // first arg is prog name e.g. ls, cd...
+    }
+    search_path_len = new_path_len;
+
+    return 0;
 }

@@ -18,6 +18,7 @@ add_executable(wish
         app/modes/interactive/common/error.c
         app/modes/interactive/common/error.h
         app/path.c
+        app/path.h
 )
 
 target_compile_options(wish PRIVATE -Wall -Wextra)

@@ -8,6 +8,8 @@
 #include <stdio.h>
 #include <string.h>
 #include "app/modes/interactive/externalcmd/external_cmd.h"
+
+#include "app/path.h"
 #include "app/modes/interactive//common/command.h"
 
 static int is_path_accessible(const command_t *cmd) {
@@ -16,8 +18,11 @@ static int is_path_accessible(const command_t *cmd) {
 }
 
 static int get_path(command_t *cmd) {
-    snprintf(cmd->path, sizeof cmd->path, "/bin/%s", cmd->argv[0]);
-    if (is_path_accessible(cmd)) return 0;
+    for (int i = 0; i < search_path_len; i++) {
+        snprintf(cmd->path, sizeof cmd->path, "%s/%s", search_path[i], cmd->argv[0]);
+        if (is_path_accessible(cmd)) return 0;
+    }
+
     return -1;
 }
 

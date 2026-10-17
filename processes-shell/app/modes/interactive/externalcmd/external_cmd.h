@@ -5,7 +5,7 @@
 #ifndef PROCESSES_SHELL_EXTERNAL_CMD_H
 #define PROCESSES_SHELL_EXTERNAL_CMD_H
 
-#include "modes/interactive/common/command.h"
+#include "app/modes/interactive/common/command.h"
 int exec_external_cmd(command_t *cmd);
 
 #endif //PROCESSES_SHELL_EXTERNAL_CMD_H
