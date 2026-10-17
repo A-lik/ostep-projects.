@@ -3,18 +3,14 @@
 #include <string.h>
 #include <stdlib.h>
 
-#include "modes/interactive/interactive.h"
+#include "app/modes/interactive/interactive.h"
 #include "common/error.h"
-#include "modes/interactive/builtincmd/builtin_cmd.h"
-#include "modes/interactive/externalcmd/external_cmd.h"
+#include "app/modes/interactive/builtincmd/builtin_cmd.h"
+#include "app/modes/interactive/externalcmd/external_cmd.h"
 
 #define DELIM " \t\n"
 
-static void print_sh_name(char *prog_name) {
-    printf("%s> ", prog_name);
-    fflush(stdout);
-}
-
+static void print_sh_name(char *prog_name);
 static int run_cmd(command_t *cmd);
 
 void interactive(char *prog_name) {
@@ -41,6 +37,11 @@ void interactive(char *prog_name) {
     }
 
     free(pLine);
+}
+
+static void print_sh_name(char *prog_name) {
+    printf("%s> ", prog_name);
+    fflush(stdout);
 }
 
 static int run_cmd(command_t *cmd) {

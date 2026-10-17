@@ -7,8 +7,8 @@
 #include <sys/wait.h>
 #include <stdio.h>
 #include <string.h>
-#include "modes/interactive/externalcmd/external_cmd.h"
-#include "modes/interactive//common/command.h"
+#include "app/modes/interactive/externalcmd/external_cmd.h"
+#include "app/modes/interactive//common/command.h"
 
 static int is_path_accessible(const command_t *cmd) {
     if (access(cmd->path, X_OK) < 0) return 0;

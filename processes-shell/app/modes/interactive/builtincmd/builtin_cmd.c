@@ -6,8 +6,8 @@
 #include <stdlib.h>
 #include <unistd.h>
 
-#include "modes/interactive/builtincmd/builtin_cmd.h"
-#include "modes/interactive/common/command.h"
+#include "app/modes/interactive/builtincmd/builtin_cmd.h"
+#include "app/modes/interactive/common/command.h"
 
 static const char *builtin_cmd_names[] = {
     [CMD_EXIT] = "exit",

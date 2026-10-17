@@ -10,13 +10,14 @@ if(NOT CMAKE_BUILD_TYPE AND NOT CMAKE_CONFIGURATION_TYPES)
 endif()
 
 add_executable(wish
-    wish.c
-    modes/batch/batch.c
-    modes/interactive/interactive.c
-    modes/interactive/builtincmd/builtin_cmd.c
-    modes/interactive/externalcmd/external_cmd.c
-        modes/interactive/common/error.c
-        modes/interactive/common/error.h
+        app/wish.c
+        app/modes/batch/batch.c
+        app/modes/interactive/interactive.c
+        app/modes/interactive/builtincmd/builtin_cmd.c
+        app/modes/interactive/externalcmd/external_cmd.c
+        app/modes/interactive/common/error.c
+        app/modes/interactive/common/error.h
+        app/path.c
 )
 
 target_compile_options(wish PRIVATE -Wall -Wextra)
