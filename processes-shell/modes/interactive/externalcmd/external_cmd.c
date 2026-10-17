@@ -2,18 +2,14 @@
 // Created by albert.terlikpayev on 16.10.2026.
 //
 
-#include "modes/interactive/externalcmd/external_cmd.h"
-#include "modes/interactive/command.h"
 #include <unistd.h>
 #include <stdlib.h>
 #include <sys/wait.h>
 #include <stdio.h>
 #include <string.h>
-
-static void print_error() {
-    const char error_message[30] = "An error has occurred\n";
-    write(STDERR_FILENO, error_message, strlen(error_message));
-}
+#include "modes/interactive/externalcmd/external_cmd.h"
+#include "modes/interactive//common/command.h"
+#include "modes/interactive/common/error.h"
 
 static int is_path_accessible(const command_t *cmd) {
     if (access(cmd->path, X_OK) < 0) {
@@ -25,11 +21,12 @@ static int is_path_accessible(const command_t *cmd) {
 
 static int get_path(command_t *cmd) {
     snprintf(cmd->path, sizeof cmd->path, "/bin/%s", cmd->argv[0]);
-    return is_path_accessible(cmd);
+    if (is_path_accessible(cmd)) return 0;
+    return -1;
 }
 
 void exec_external_cmd(command_t *cmd) {
-    if (get_path(cmd) == 0) return;
+    if (get_path(cmd) != 0) return;
 
     pid_t pid = fork();
     if (pid == 0) {

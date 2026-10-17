@@ -10,6 +10,7 @@ typedef enum { CMD_EXIT, CMD_CD, CMD_PATH, CMD_COUNT } builtin_cmd_t;
 
 typedef struct {
     char *argv[64];
+    int argc;
     char path[512];
     builtin_cmd_t builtin_cmd_num;
 } command_t;

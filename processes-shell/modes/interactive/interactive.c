@@ -25,14 +25,13 @@ void interactive(char *prog_name) {
         if (getline(&pLine, &linecap, stdin) == -1 ) break;
 
         char *tok;
-        int n = 0;
         char *ppLine = pLine;
 
-        while ((tok = strsep(&ppLine, DELIM)) != NULL && n < 63) {
+        while ((tok = strsep(&ppLine, DELIM)) != NULL && cmd.argc < 63) {
             if (*tok == '\0') continue;
-            cmd.argv[n++] = tok;
+            cmd.argv[cmd.argc++] = tok;
         }
-        cmd.argv[n] = NULL;
+        cmd.argv[cmd.argc] = NULL;
 
         int cmd_res;
         if ((cmd_res = find_builtin_cmd(cmd.argv[0])) >= 0) {

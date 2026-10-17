@@ -7,13 +7,7 @@
 
 typedef enum { MODE_BATCH, MODE_INTERACTIVE } sh_mode_t;
 
-static sh_mode_t choose_mode(const int argc) {
-    sh_mode_t mode;
-    if (argc == 2) mode = MODE_BATCH;
-    else mode = MODE_INTERACTIVE;
-
-    return mode;
-}
+static sh_mode_t choose_mode(int argc);
 
 int main(const int argc, char *argv[]) {
     if (argc > 2) exit(0);
@@ -32,4 +26,12 @@ int main(const int argc, char *argv[]) {
     }
 
     return 0;
+}
+
+static sh_mode_t choose_mode(const int argc) {
+    sh_mode_t mode;
+    if (argc == 2) mode = MODE_BATCH;
+    else mode = MODE_INTERACTIVE;
+
+    return mode;
 }

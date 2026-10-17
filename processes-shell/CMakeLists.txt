@@ -15,6 +15,8 @@ add_executable(wish
     modes/interactive/interactive.c
     modes/interactive/builtincmd/builtin_cmd.c
     modes/interactive/externalcmd/external_cmd.c
+        modes/interactive/common/error.c
+        modes/interactive/common/error.h
 )
 
 target_compile_options(wish PRIVATE -Wall -Wextra)
