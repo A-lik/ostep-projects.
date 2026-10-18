@@ -3,6 +3,7 @@
 #include "modes/batch/batch.h"
 #include "modes/interactive/interactive.h"
 #include "app/path.h"
+#include "modes/common/error/error.h"
 
 typedef enum { MODE_BATCH, MODE_INTERACTIVE } sh_mode_t;
 
@@ -10,7 +11,10 @@ static sh_mode_t choose_mode(int argc);
 static void init_path();
 
 int main(const int argc, char *argv[]) {
-    if (argc > 2) exit(1);
+    if (argc > 2) {
+        print_error();
+        exit(1);
+    }
     init_path();
     const sh_mode_t mode = choose_mode(argc);
 
