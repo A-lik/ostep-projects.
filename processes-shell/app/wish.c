@@ -1,7 +1,5 @@
-#include <stdio.h>
 #include <strings.h>
 #include <stdlib.h>
-#include <unistd.h>
 #include "modes/batch/batch.h"
 #include "modes/interactive/interactive.h"
 #include "app/path.h"
@@ -12,7 +10,7 @@ static sh_mode_t choose_mode(int argc);
 static void init_path();
 
 int main(const int argc, char *argv[]) {
-    if (argc > 2) exit(0);
+    if (argc > 2) exit(1);
     init_path();
     const sh_mode_t mode = choose_mode(argc);
 

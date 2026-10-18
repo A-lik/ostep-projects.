@@ -19,10 +19,12 @@ add_executable(wish
         app/modes/common/error/error.h
         app/path.c
         app/path.h
-        app/modes/common/cmd_parser/cmd_parser.c
-        app/modes/common/cmd_parser/cmd_parser.h
+        app/modes/common/tokenizer/tokenizer.c
+        app/modes/common/tokenizer/tokenizer.h
         app/modes/common/cmd_runner/cmd_runner.c
         app/modes/common/cmd_runner/cmd_runner.h
+        app/modes/common/parser/input_parser/line_parser.c
+        app/modes/common/parser/input_parser/line_parser.h
 )
 
 target_compile_options(wish PRIVATE -Wall -Wextra)

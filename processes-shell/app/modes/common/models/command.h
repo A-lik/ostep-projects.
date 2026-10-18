@@ -12,6 +12,8 @@ typedef struct {
     char *argv[64];
     int argc;
     char path[512];
+    int is_redirect;
+    char *redirect_fName;
     builtin_cmd_t builtin_cmd_num;
 } command_t;
 
