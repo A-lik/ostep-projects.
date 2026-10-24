@@ -5,7 +5,10 @@
 #ifndef WISH_CMD_RUNNER_H
 #define WISH_CMD_RUNNER_H
 
+#include <sys/_types/_pid_t.h>
+
 #include "app/modes/common/models/command.h"
-int run_cmd(command_t *cmd);
+void run_cmds(commands_t *cmds);
+pid_t run_cmd(command_t *cmd);
 
 #endif //WISH_CMD_RUNNER_H

@@ -6,7 +6,7 @@
 #define WISH_INPUT_PARSER_H
 #include "app/modes/common/models/command.h"
 
-typedef enum { PARSE_OK, PARSE_EMPTY, PARSE_ERR } parse_status_t;
+typedef enum { PARSE_OK, PARSE_EMPTY, PARSE_ERR } parse_result_t;
 
-parse_status_t parse_line(char *line, command_t *cmd);
+parse_result_t parse_line(char *line, commands_t *cmds);
 #endif //WISH_INPUT_PARSER_H

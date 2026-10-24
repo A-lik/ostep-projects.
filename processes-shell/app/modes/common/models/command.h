@@ -17,4 +17,8 @@ typedef struct {
     builtin_cmd_t builtin_cmd_num;
 } command_t;
 
+typedef struct {
+    command_t parallel_cmds [64];
+    int cmd_num;
+} commands_t;
 #endif //PROCESSES_SHELL_COMMAND_H

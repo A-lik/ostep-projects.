@@ -18,13 +18,13 @@ void batch(char *file_name) {
     size_t input_cap = 0;
 
     while (getline(&input_line, &input_cap, fp) != -1) {
-        command_t cmd = {0};
-        switch (parse_line(input_line, &cmd)) {
+        commands_t cmds;
+        switch (parse_line(input_line, &cmds)) {
             case PARSE_EMPTY: continue;
             case PARSE_OK: break;
             case PARSE_ERR: print_error(); continue;
         }
-        if (run_cmd(&cmd) < 0) print_error();
+        run_cmds(&cmds);
     }
 
     free(input_line);

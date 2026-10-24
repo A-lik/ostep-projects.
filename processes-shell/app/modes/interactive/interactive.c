@@ -17,15 +17,15 @@ void interactive(char *prog_name) {
 
     while (1) {
         print_sh_name(prog_name);
-        command_t cmd = {0};
+        commands_t cmds;
 
         if (getline(&input_line, &input_cap, stdin) == -1) break;
-        switch (parse_line(input_line, &cmd)) {
+        switch (parse_line(input_line, &cmds)) {
             case PARSE_EMPTY: continue;
             case PARSE_OK: break;
             case PARSE_ERR: print_error(); continue;
         }
-        if (run_cmd(&cmd) < 0) print_error();
+        run_cmds(&cmds);
     }
     free(input_line);
 }

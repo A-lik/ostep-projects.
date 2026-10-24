@@ -6,6 +6,6 @@
 #define PROCESSES_SHELL_EXTERNAL_CMD_H
 #include "app/modes/common/models/command.h"
 
-int exec_external_cmd(command_t *cmd);
+pid_t exec_external_cmd(command_t *cmd);
 
 #endif //PROCESSES_SHELL_EXTERNAL_CMD_H

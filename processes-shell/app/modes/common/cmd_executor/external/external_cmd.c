@@ -16,7 +16,7 @@ static int get_path(command_t *cmd);
 static int is_path_accessible(const command_t *cmd);
 static int redirect_output(char *filename);
 
-int exec_external_cmd(command_t *cmd) {
+pid_t exec_external_cmd(command_t *cmd) {
     if (get_path(cmd) != 0) return -1;
 
     pid_t pid = fork();
@@ -26,8 +26,7 @@ int exec_external_cmd(command_t *cmd) {
         if (execv(cmd->path, cmd->argv) == -1) return -1;
     }
 
-    waitpid(pid, NULL, 0);
-    return 0;
+    return pid;
 }
 
 static int get_path(command_t *cmd) {
